@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -32,6 +32,7 @@
 		A5A8C3F8260890FB009C1D0F /* UserInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A8C3F5260890FB009C1D0F /* UserInfoTableViewCell.swift */; };
 		A5A8C3F9260890FB009C1D0F /* UserNotesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A8C3F6260890FB009C1D0F /* UserNotesTableViewCell.swift */; };
 		A5A8C3FA260890FB009C1D0F /* UserAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A8C3F7260890FB009C1D0F /* UserAvatarTableViewCell.swift */; };
+		A5A8C4262608C20C009C1D0F /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A8C4252608C20C009C1D0F /* UIViewController+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		A5A8C3F5260890FB009C1D0F /* UserInfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoTableViewCell.swift; sourceTree = "<group>"; };
 		A5A8C3F6260890FB009C1D0F /* UserNotesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNotesTableViewCell.swift; sourceTree = "<group>"; };
 		A5A8C3F7260890FB009C1D0F /* UserAvatarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAvatarTableViewCell.swift; sourceTree = "<group>"; };
+		A5A8C4252608C20C009C1D0F /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		ABBCA00FC64A26E10C3FDAD7 /* Pods_Git_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Git_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -169,6 +171,7 @@
 			children = (
 				A57C9B212606717400198A94 /* UIImageView+Cache.swift */,
 				A54D90832607AAAA004F33C1 /* UIImageView+UI.swift */,
+				A5A8C4252608C20C009C1D0F /* UIViewController+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -230,7 +233,6 @@
 				2EDFE5CDC9A8A0C2AD9BD9AF /* Pods-Git App.debug.xcconfig */,
 				4237DB89EC4E15E564E521DC /* Pods-Git App.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -360,6 +362,7 @@
 				A57C9B2B26067F4F00198A94 /* UsersList+CoreDataProperties.swift in Sources */,
 				A54D90BB2607F0EE004F33C1 /* LocalStorageManager.swift in Sources */,
 				A54D90882607B56B004F33C1 /* DataManager.swift in Sources */,
+				A5A8C4262608C20C009C1D0F /* UIViewController+Extension.swift in Sources */,
 				A57C9B0C2604EB9D00198A94 /* NetworkManager.swift in Sources */,
 				A57C9B372606985F00198A94 /* UserProfileViewController.swift in Sources */,
 				A5A8C3F9260890FB009C1D0F /* UserNotesTableViewCell.swift in Sources */,

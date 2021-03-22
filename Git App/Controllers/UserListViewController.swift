@@ -63,6 +63,7 @@ class UserListViewController: UIViewController {
     // MARK: - Fetch data from db and then download from server side
     func updateTableContent() {
         localFetch()
+        self.showProgressHUD(self.view)
         downloadUsersListWithPageNumber(self.currentPageNumber)
     }
     
@@ -91,10 +92,20 @@ class UserListViewController: UIViewController {
                         LocalStorageManager.sharedInstance.storeLastPageNumber(self.currentPageNumber)
                     }
                 } else {
-                    print("Decoding Error")
+                    DispatchQueue.main.async {
+                        self.showErrorAlert("Decoding data error")
+                    }
                 }
+                DispatchQueue.main.async {
+                    self.closeProgressHUD(self.view)
+                }
+                
                 self.isStartLoadNextPage = false
             } , failureComplition: { error in
+                DispatchQueue.main.async {
+                    self.closeProgressHUD(self.view)
+                    self.showErrorAlert(error.localizedDescription)
+                }
                 self.isStartLoadNextPage = false
             });
         }

@@ -20,13 +20,19 @@ class UserProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.showProgressHUD(self.view)
+        
         DispatchQueue.main.async {
             
             // mark selected user as reviewed
             self.markUserAsReviewed()
             
+            
             // fetch user profile data from server side
             self.downloadUserProfile((self.userEntity?.username)!) { status in
+                DispatchQueue.main.async {
+                self.closeProgressHUD(self.view)
+                }
                 if status {
                     DispatchQueue.main.async {
                         self.configureUI()
@@ -34,7 +40,9 @@ class UserProfileViewController: UIViewController {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        self.navigationController?.popToRootViewController(animated: true)
+                        self.showAlert("Could not profile data. Please try againg", handler: { (action) in
+                            self.navigationController?.popViewController(animated: true)
+                        })
                     }
                 }
             }
