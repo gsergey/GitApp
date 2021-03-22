@@ -32,6 +32,10 @@ class UserProfileViewController: UIViewController {
                         self.configureUI()
                         self.tableView.reloadData()
                     }
+                } else {
+                    DispatchQueue.main.async {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
                 }
             }
         }
