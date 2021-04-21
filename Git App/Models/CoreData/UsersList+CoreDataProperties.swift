@@ -78,4 +78,9 @@ extension UsersList {
         request.predicate = NSPredicate(format: "user_id = %d", user_id)
         return (try? context.fetch(request))?.first
     }
+    
+    class func fetchLastUser(inContext context: NSManagedObjectContext) -> UsersList? {
+        let request: NSFetchRequest<UsersList> = UsersList.fetchRequest()
+        return (try? context.fetch(request))?.last
+    }
 }

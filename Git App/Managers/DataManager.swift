@@ -45,4 +45,12 @@ class DataManager: NSObject {
         user.markAsReviewed(context!)
         CoreDataStack.sharedInstance.saveContext()
     }
+    
+    func getLastUserID() -> Int32 {
+        let context = CoreDataStack.sharedInstance.mainContext()
+        guard let lastUser = UsersList.fetchLastUser(inContext: context!) else {
+            return 0
+        }
+        return lastUser.user_id
+    }
 }

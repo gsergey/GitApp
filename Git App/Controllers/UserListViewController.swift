@@ -194,7 +194,8 @@ extension UserListViewController: UIScrollViewDelegate {
      */
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if ((tableView.contentOffset.y + tableView.frame.size.height) >= tableView.contentSize.height - 20) && !self.isStartLoadNextPage {
-            downloadUsersListWithPageNumber(self.currentPageNumber+1)
+            let lastUserID = DataManager.sharedInstance.getLastUserID()
+            downloadUsersListWithPageNumber(Int(lastUserID))
         }
     }
 }
