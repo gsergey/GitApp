@@ -91,16 +91,14 @@ extension UserProfile {
         self.followers = entity.followers
     }
     
-    func addNotes(notes: String, inContext context: NSManagedObjectContext) {
-        self.notes = notes
-    }
-    
-    func fetchNotes(inContext context: NSManagedObjectContext) {
-        let profile = UserProfile.fetchProfileWithID(self.user_id, inContext: context)
-        if profile != nil {
-            self.notes = profile?.notes
+    func addNotes(_ notes: String) {
+        CoreDataStack.sharedInstance.performForBackgroundContext { context in
+            let profile = UserProfile.fetchProfileWithID(self.user_id, inContext: context)
+            if profile != nil {
+                profile!.notes = notes
+            }
+            context.saveThrows()
         }
-        
     }
     
     class func fetchProfileWithID(_ user_id: Int32, inContext context: NSManagedObjectContext) -> UserProfile? {

@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import Network
 
 class UserListViewController: UIViewController {
 
@@ -17,9 +18,11 @@ class UserListViewController: UIViewController {
     var queue: DispatchQueue = DispatchQueue.global(qos: .background)
     let semaphore = DispatchSemaphore(value: 1)
     
-    var currentPageNumber: Int = 0
     var isStartLoadNextPage: Bool = false
     var selectedIndexPath: IndexPath = IndexPath(row: 0, section: 0)
+    var autoloadDataFromLastRequest: Bool = false
+    
+    let monitor = NWPathMonitor()
     
     // MARK: - Init fetch result controller
     lazy var fetchedhResultController: NSFetchedResultsController<NSFetchRequestResult> = {
@@ -35,16 +38,15 @@ class UserListViewController: UIViewController {
         super.viewDidLoad()
         
         configureUI()
-        prepareData()
         updateTableContent()
+        startMonitoringNetwork()
     }
     
-    
-    // MARK: - Prepare Data
-    func prepareData() {
-        self.currentPageNumber = LocalStorageManager.sharedInstance.getLastPageNumber()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        self.tableView.reloadData()
     }
-    
+
     
     // MARK: - UI configs
     
@@ -63,8 +65,10 @@ class UserListViewController: UIViewController {
     // MARK: - Fetch data from db and then download from server side
     func updateTableContent() {
         localFetch()
-        self.showProgressHUD(self.view)
-        downloadUsersListWithPageNumber(self.currentPageNumber)
+        if(fetchedhResultController.sections?.first?.numberOfObjects == 0) {
+            self.showProgressHUD(self.view)
+            downloadUsersListFromLastUserID(0)
+        }
     }
     
     func localFetch() {
@@ -76,7 +80,7 @@ class UserListViewController: UIViewController {
     }
     
     // MARK: - API function
-    func downloadUsersListWithPageNumber(_ pageNumber: Int) {
+    func downloadUsersListFromLastUserID(_ user_id: Int) {
         queue.async {
             self.semaphore.wait()
                 
@@ -84,13 +88,9 @@ class UserListViewController: UIViewController {
                 self.semaphore.signal()
             }
             
-            NetworkManager.downloadUsersList(pageNumber: pageNumber, successComplition: { data in
+            NetworkManager.downloadUsersList(pageNumber: user_id, successComplition: { data in
                 if let response = try? JSONDecoder().decode([UserListModel].self, from: data) {
                     DataManager.sharedInstance.saveUserList(list: response)
-                    self.currentPageNumber = pageNumber
-                    if(response.count > 0) {
-                        LocalStorageManager.sharedInstance.storeLastPageNumber(self.currentPageNumber)
-                    }
                 } else {
                     DispatchQueue.main.async {
                         self.showErrorAlert("Decoding data error")
@@ -102,6 +102,11 @@ class UserListViewController: UIViewController {
                 
                 self.isStartLoadNextPage = false
             } , failureComplition: { error in
+                if let nserror = error as NSError? {
+                    if nserror.code == -1009 {
+                        self.autoloadDataFromLastRequest = true
+                    }
+                }
                 DispatchQueue.main.async {
                     self.closeProgressHUD(self.view)
                     self.showErrorAlert(error.localizedDescription)
@@ -119,6 +124,28 @@ class UserListViewController: UIViewController {
                 vc?.userEntity = user
             }
         }
+    }
+    
+    // MARK: - Handling Network state
+    
+    fileprivate func startMonitoringNetwork() {
+        monitor.start(queue: DispatchQueue.global(qos: .background))
+        
+        monitor.pathUpdateHandler = { [self] path in
+            if path.status == .satisfied {
+                if self.autoloadDataFromLastRequest {
+                    let lastUserID = DataManager.sharedInstance.getLastUserID()
+                    downloadUsersListFromLastUserID(lastUserID)
+                    self.autoloadDataFromLastRequest = false
+                }
+            } else  if path.status == .unsatisfied {
+                print("Noo! We haven't internet!")
+            }
+        }
+    }
+    
+    fileprivate func storMonitoringNetwork() {
+        monitor.cancel()
     }
 }
 
@@ -153,6 +180,7 @@ extension UserListViewController: UITableViewDelegate {
         self.tableView .deselectRow(at: indexPath, animated: true)
         self.selectedIndexPath = indexPath
         self.performSegue(withIdentifier: "showProfile", sender: nil)
+        self.view .endEditing(true)
     }
 }
 
@@ -195,7 +223,7 @@ extension UserListViewController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if ((tableView.contentOffset.y + tableView.frame.size.height) >= tableView.contentSize.height - 20) && !self.isStartLoadNextPage {
             let lastUserID = DataManager.sharedInstance.getLastUserID()
-            downloadUsersListWithPageNumber(Int(lastUserID))
+            downloadUsersListFromLastUserID(lastUserID)
         }
     }
 }
@@ -225,7 +253,8 @@ extension UserListViewController: UISearchBarDelegate {
             if searchText.count > 0 {
                 let containsPredicate: NSPredicate = NSPredicate(format: "username contains[cd] %@",  searchText)
                 let matchPredicate: NSPredicate = NSPredicate(format: "username MATCHES[cd] %@",  searchText)
-                let finalPredicate: NSPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [containsPredicate, matchPredicate])
+                let notesPredicate: NSPredicate = NSPredicate(format: "notes contains[cd] %@", searchText)
+                let finalPredicate: NSPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [containsPredicate, matchPredicate, notesPredicate])
                 self.fetchedhResultController.fetchRequest.predicate = finalPredicate
                 
                 self.localFetch()

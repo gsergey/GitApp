@@ -13,39 +13,16 @@ class UserProfileViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     
     var userEntity: UsersList?
-    var profileEntity: UserProfile?
-    var notesTextString: String!
+    var profileEntity: UserProfile!
+    var notesTextString: String = ""
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.showProgressHUD(self.view)
-        
         DispatchQueue.main.async {
-            
-            // mark selected user as reviewed
-            self.markUserAsReviewed()
-            
-            
-            // fetch user profile data from server side
-            self.downloadUserProfile((self.userEntity?.username)!) { status in
-                DispatchQueue.main.async {
-                self.closeProgressHUD(self.view)
-                }
-                if status {
-                    DispatchQueue.main.async {
-                        self.configureUI()
-                        self.tableView.reloadData()
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.showAlert("Could not profile data. Please try againg", handler: { (action) in
-                            self.navigationController?.popViewController(animated: true)
-                        })
-                    }
-                }
-            }
+            self.showProgressHUD(self.view)
+            self.fetchUserProfile()
         }
     }
     
@@ -61,7 +38,6 @@ class UserProfileViewController: UIViewController {
         NetworkManager.downloadUserProfile(username: username, successComplition: { data in
             if let response = try? JSONDecoder().decode(UserProfileModel.self, from: data) {
                 self.profileEntity = DataManager.sharedInstance.saveProfile(response)
-                self.fetchNotes()
                 complition(true)
             } else {
                 print("Decoding Error")
@@ -78,32 +54,58 @@ class UserProfileViewController: UIViewController {
     // MARK: - Action methods
     
     @IBAction func onSaveButtonTap(_ sender: Any?) {
+        self.showAlert("Notes saved")
         saveNotes()
         self.view .endEditing(true)
     }
     
     
-    // MARK: - Updated data in db
-    
-    func saveNotes() {
-        DataManager.sharedInstance.saveProfileNotes(self.notesTextString ?? "", for: self.profileEntity!)
-        var state: Bool = false
-        if self.notesTextString.count > 0 {
-            state = true
-        }
-        DataManager.sharedInstance.addNotesToUsersList(state, for: self.userEntity!)
-        DataManager.sharedInstance.markProfileAsReviewed(userID: self.profileEntity!.user_id)
-    }
+    // MARK: - Update data in db
     
     func markUserAsReviewed() {
-        let context = CoreDataStack.sharedInstance.mainContext()!
-        self.userEntity?.markAsReviewed(context)
-        CoreDataStack.sharedInstance.saveContext()
+        self.userEntity?.markAsReviewed()
     }
     
-    func fetchNotes() {
-        let context = CoreDataStack.sharedInstance.mainContext()!
-        self.profileEntity?.fetchNotes(inContext: context)
+    func saveNotes() {
+        self.profileEntity?.addNotes(self.notesTextString)
+        self.userEntity?.addNotesMark(self.notesTextString)
+    }
+    
+    func fetchUserProfile() {
+        guard let user = self.userEntity else {
+            self.navigationController?.popToRootViewController(animated: true)
+            return
+        }
+        
+        // fetch user profile if was stored previously
+        self.profileEntity = DataManager.sharedInstance.fetchProfileWithID(user_id: Int(user.user_id))
+        
+        if self.profileEntity != nil {
+            DispatchQueue.main.async {
+                self.configureUI()
+                self.tableView.reloadData()
+                self.closeProgressHUD(self.view)
+            }
+        }
+            
+        // fetch user profile data from server side
+        self.downloadUserProfile((user.username)!) { status in
+            DispatchQueue.main.async {
+                self.closeProgressHUD(self.view)
+                
+                if status {
+                    // mark user's profile as reviewed
+                    self.markUserAsReviewed()
+                    
+                    self.configureUI()
+                    self.tableView.reloadData()
+                } else {
+                    self.showAlert("Could not download profile data. Please try again", handler: { (action) in
+                        self.navigationController?.popViewController(animated: true)
+                    })
+                }
+            }
+        }
     }
 }
 
@@ -167,6 +169,7 @@ extension UserProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView .deselectRow(at: indexPath, animated: true)
+        self.view .endEditing(true)
     }
 }
 

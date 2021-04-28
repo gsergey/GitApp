@@ -36,6 +36,7 @@ extension UsersList {
     @NSManaged public var followers_url: String?
     @NSManaged public var isNotes: Bool
     @NSManaged public var reviewed: Bool
+    @NSManaged public var notes: String?
     @NSManaged public var relationship: UserProfile?
     
     class func initWithAPIModel(entity: UserListModel, inContext context: NSManagedObjectContext) -> UsersList {
@@ -65,12 +66,25 @@ extension UsersList {
         self.followers_url = entity.following_url
     }
     
-    func addNotesMark(isNotesAdded: Bool, inContext context: NSManagedObjectContext) {
-        self.isNotes = isNotesAdded
+    func addNotesMark(_ notesString: String) {
+        CoreDataStack.sharedInstance.performForBackgroundContext { context in
+            let user = UsersList.fetchUserWithID(self.user_id, inContext: context)
+            if user != nil {
+                user?.isNotes = notesString.count > 0 ? true : false
+                user?.notes = notesString
+            }
+            context.saveThrows()
+        }
     }
     
-    func markAsReviewed(_ context: NSManagedObjectContext) {
-        self.reviewed = true
+    func markAsReviewed() {
+        CoreDataStack.sharedInstance.performForBackgroundContext { context in
+            let user = UsersList.fetchUserWithID(self.user_id, inContext: context)
+            if user != nil {
+                user?.reviewed = true
+            }
+            context.saveThrows()
+        }
     }
     
     class func fetchUserWithID(_ user_id: Int32, inContext context: NSManagedObjectContext) -> UsersList? {

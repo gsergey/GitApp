@@ -27,9 +27,7 @@ class UserListTableViewCell: UITableViewCell {
         
         self.avatarImageView?.maskCircle()
         
-        if entity.reviewed {
-            self.backgroundColor = UIColor.lightGray
-        }
+        self.backgroundColor = entity.reviewed ? UIColor.lightGray : UIColor.systemBackground
         
         if let url = entity.avatar_url {
             self.avatarImageView?.loadCachedImageFromURLString(url, placeholder: UIImage(named: "avatar_template"), complitionBlock: { [self] in

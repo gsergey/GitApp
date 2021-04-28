@@ -40,7 +40,6 @@ class CoreDataStack: NSObject {
             do {
                 try context.save()
             } catch {
-                
                 let nserror = error as NSError
                 print("Unresolved error \(nserror), \(nserror.userInfo)")
             }
@@ -68,6 +67,19 @@ class CoreDataStack: NSObject {
     }
 }
 
+extension NSManagedObjectContext {
+    
+    public func saveThrows() {
+        if self.hasChanges {
+            do {
+                try self.save()
+            } catch {
+                let nserror = error as NSError
+                NSLog("CoreDataStack saveThrows Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
+}
 
 extension CoreDataStack {
     func appDirectory() {

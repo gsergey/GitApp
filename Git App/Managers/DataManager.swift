@@ -17,7 +17,7 @@ class DataManager: NSObject {
         CoreDataStack.sharedInstance.saveContext()
     }
     
-    func saveProfile(_ profile: UserProfileModel) -> UserProfile {
+    func saveProfile(_ profile: UserProfileModel) -> UserProfile {        
         let context = CoreDataStack.sharedInstance.mainContext()
         let profile = UserProfile.initWithAPIModel(entity: profile, inContext: context!)
         CoreDataStack.sharedInstance.saveContext()
@@ -25,32 +25,20 @@ class DataManager: NSObject {
         return profile
     }
     
-    func saveProfileNotes(_ notes: String, for profile: UserProfile) {
+    func fetchProfileWithID(user_id: Int) -> UserProfile? {
         let context = CoreDataStack.sharedInstance.mainContext()
-        profile.addNotes(notes: notes, inContext: context!)
-        CoreDataStack.sharedInstance.saveContext()
-    }
-    
-    func addNotesToUsersList(_ notesState: Bool, for profile: UsersList) {
-        let context = CoreDataStack.sharedInstance.mainContext()
-        profile.addNotesMark(isNotesAdded: notesState, inContext: context!)
-        CoreDataStack.sharedInstance.saveContext()
-    }
-    
-    func markProfileAsReviewed(userID: Int32) {
-        let context = CoreDataStack.sharedInstance.mainContext()
-        guard let user = UsersList.fetchUserWithID(userID, inContext: context!) else {
-            return
+        guard let profile = UserProfile.fetchProfileWithID(Int32(user_id), inContext: context!) else {
+            return nil
         }
-        user.markAsReviewed(context!)
-        CoreDataStack.sharedInstance.saveContext()
+        
+        return profile
     }
     
-    func getLastUserID() -> Int32 {
+    func getLastUserID() -> Int {
         let context = CoreDataStack.sharedInstance.mainContext()
         guard let lastUser = UsersList.fetchLastUser(inContext: context!) else {
             return 0
         }
-        return lastUser.user_id
+        return Int(lastUser.user_id)
     }
 }

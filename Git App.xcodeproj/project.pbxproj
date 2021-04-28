@@ -10,7 +10,6 @@
 		0099FF410658D7B827A59B9B /* Pods_Git_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABBCA00FC64A26E10C3FDAD7 /* Pods_Git_App.framework */; };
 		A54D90842607AAAA004F33C1 /* UIImageView+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54D90832607AAAA004F33C1 /* UIImageView+UI.swift */; };
 		A54D90882607B56B004F33C1 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54D90872607B56B004F33C1 /* DataManager.swift */; };
-		A54D90BB2607F0EE004F33C1 /* LocalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54D90BA2607F0EE004F33C1 /* LocalStorageManager.swift */; };
 		A57C9AE92603BC1000198A94 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57C9AE82603BC1000198A94 /* AppDelegate.swift */; };
 		A57C9AEB2603BC1000198A94 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57C9AEA2603BC1000198A94 /* SceneDelegate.swift */; };
 		A57C9AED2603BC1000198A94 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57C9AEC2603BC1000198A94 /* UserListViewController.swift */; };
@@ -40,7 +39,6 @@
 		4237DB89EC4E15E564E521DC /* Pods-Git App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Git App.release.xcconfig"; path = "Target Support Files/Pods-Git App/Pods-Git App.release.xcconfig"; sourceTree = "<group>"; };
 		A54D90832607AAAA004F33C1 /* UIImageView+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+UI.swift"; sourceTree = "<group>"; };
 		A54D90872607B56B004F33C1 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
-		A54D90BA2607F0EE004F33C1 /* LocalStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageManager.swift; sourceTree = "<group>"; };
 		A57C9AE52603BC1000198A94 /* Git App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Git App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A57C9AE82603BC1000198A94 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A57C9AEA2603BC1000198A94 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +59,7 @@
 		A57C9B2F26067F9200198A94 /* UserProfile+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserProfile+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A57C9B362606985F00198A94 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		A57C9B3A2607794B00198A94 /* UserListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListTableViewCell.swift; sourceTree = "<group>"; };
+		A5808BDB263A11DC000124A1 /* Git_App Search.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Git_App Search.xcdatamodel"; sourceTree = "<group>"; };
 		A5A8C3F5260890FB009C1D0F /* UserInfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoTableViewCell.swift; sourceTree = "<group>"; };
 		A5A8C3F6260890FB009C1D0F /* UserNotesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNotesTableViewCell.swift; sourceTree = "<group>"; };
 		A5A8C3F7260890FB009C1D0F /* UserAvatarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAvatarTableViewCell.swift; sourceTree = "<group>"; };
@@ -182,7 +181,6 @@
 				A57C9B0B2604EB9D00198A94 /* NetworkManager.swift */,
 				A57C9B2526067C4800198A94 /* CoreDataStack.swift */,
 				A54D90872607B56B004F33C1 /* DataManager.swift */,
-				A54D90BA2607F0EE004F33C1 /* LocalStorageManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -360,7 +358,6 @@
 				A57C9B2626067C4800198A94 /* CoreDataStack.swift in Sources */,
 				A57C9AED2603BC1000198A94 /* UserListViewController.swift in Sources */,
 				A57C9B2B26067F4F00198A94 /* UsersList+CoreDataProperties.swift in Sources */,
-				A54D90BB2607F0EE004F33C1 /* LocalStorageManager.swift in Sources */,
 				A54D90882607B56B004F33C1 /* DataManager.swift in Sources */,
 				A5A8C4262608C20C009C1D0F /* UIViewController+Extension.swift in Sources */,
 				A57C9B0C2604EB9D00198A94 /* NetworkManager.swift in Sources */,
@@ -519,8 +516,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = G8G8RHXSUX;
 				INFOPLIST_FILE = "Git App/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -529,7 +526,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.galaganss.swiftsample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Sample Development Profile";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -541,8 +538,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = G8G8RHXSUX;
 				INFOPLIST_FILE = "Git App/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -551,7 +548,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.galaganss.swiftsample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Sample Development Profile";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -584,9 +581,10 @@
 		A57C9AF12603BC1000198A94 /* Git_App.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				A5808BDB263A11DC000124A1 /* Git_App Search.xcdatamodel */,
 				A57C9AF22603BC1000198A94 /* Git_App.xcdatamodel */,
 			);
-			currentVersion = A57C9AF22603BC1000198A94 /* Git_App.xcdatamodel */;
+			currentVersion = A5808BDB263A11DC000124A1 /* Git_App Search.xcdatamodel */;
 			path = Git_App.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

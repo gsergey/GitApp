@@ -24,7 +24,7 @@ extension UIViewController {
     }
     
     func showAlert(_ message: String, handler: ((UIAlertAction) -> Void)?) {
-        showAlert(message, title: NSLocalizedString("isPay", comment: ""), handler: handler)
+        showAlert(message, title: NSLocalizedString("GitApp", comment: ""), handler: handler)
     }
     
     func showAlert(_ message: String, handler: ((UIAlertAction) -> Void)?, title: String) {
